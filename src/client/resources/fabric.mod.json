@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "wiamautoenchantmod",
+  "version": "${version}",
+  "name": "WiamAutoEnchantMod",
+  "description": "Say thanks to Wiamotit1e, the most angelic and glorious author!!",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/wiamautoenchantmod/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "wiam.wiamautoenchantmod.client.WiamautoenchantmodClient"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "wiamautoenchantmod.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.10",
+    "fabric-language-kotlin": "*",
+    "fabric": "*",
+    "minecraft": "~1.21"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "wiam.wiamautoenchantmod.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MinecraftClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+  ]
+}
