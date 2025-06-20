@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "wiamautoenchantmod",
-  "version": "${version}",
+  "version": "1.0.0",
   "name": "WiamAutoEnchantMod",
   "description": "Say thanks to Wiamotit1e, the most angelic and glorious author!!",
-  "authors": [],
+  "authors": ["Wiamotit1e"],
   "contact": {},
   "license": "MIT",
   "icon": "assets/wiamautoenchantmod/icon.png",
