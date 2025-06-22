@@ -1,23 +1,22 @@
 package wiam.wiamautoenchantmod.client.config
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import net.fabricmc.loader.api.FabricLoader
 import java.nio.file.Files
-import java.nio.file.Path
 
-object ConfigFileInteraction : IConfigFileInteraction {
-    val CONFIG_PATH: Path = FabricLoader.getInstance().configDir.resolve("wiamautoenchant.json")
-    val GSON: Gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
+object ConfigFileInteraction : IConfigFileInteraction, IConfigProvider {
+    private val CONFIG_PATH = FabricLoader.getInstance().configDir.resolve("wiamautoenchant.json")
+    private val GSON = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
     private var currentConfig: Config = Config.DEFAULT
     
-    override fun getConfig() = currentConfig.copy()
+    override fun getConfig() = currentConfig.deepCopy()
     
     override fun loadConfigFile(): Config {
         return try {
             if (!Files.exists(CONFIG_PATH)) {
-                saveConfigFile() // 创建默认配置文件
-                Config.DEFAULT
+                currentConfig = Config.DEFAULT
+                saveConfigFile(currentConfig) // 创建默认配置文件
+                currentConfig
             } else {
                 Files.newBufferedReader(CONFIG_PATH).use { reader ->
                     GSON.fromJson(reader, Config::class.java).also {
@@ -27,22 +26,24 @@ object ConfigFileInteraction : IConfigFileInteraction {
             }
         } catch (e: Exception) {
             println("Failed to load config: ${e.message}")
-            Config.DEFAULT
+            currentConfig = Config.DEFAULT
+            currentConfig
         }
     }
     
-    override fun saveConfigFile() {
+    override fun saveConfigFile(config: Config) {
         try {
             Files.newBufferedWriter(CONFIG_PATH).use { writer ->
-                GSON.toJson(currentConfig, writer)
+                GSON.toJson(config, writer)
             }
         } catch (e: Exception) {
             println("Failed to save config: ${e.message}")
         }
     }
     
-    // 辅助方法：更新当前配置
-    fun updateConfig(newConfig: Config) {
+    override fun updateConfig(action :(Config) -> Unit) {
+        val newConfig = currentConfig.apply(action)
+        saveConfigFile(newConfig)
         currentConfig = newConfig
     }
 }

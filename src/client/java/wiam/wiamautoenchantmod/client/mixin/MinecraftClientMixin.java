@@ -5,8 +5,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.screen.slot.SlotActionType;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,11 +12,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import wiam.wiamautoenchantmod.client.AutoEnchantSign;
-import wiam.wiamautoenchantmod.client.AutoEnchanter;
 import wiam.wiamautoenchantmod.client.AutoEnchanterController;
 import wiam.wiamautoenchantmod.client.WiamUtil;
-import wiam.wiamautoenchantmod.client.config.Action;
-import wiam.wiamautoenchantmod.client.config.ConfigFileInteraction;
+import wiam.wiamautoenchantmod.client.config.ConfigService;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
@@ -39,7 +35,7 @@ public class MinecraftClientMixin {
         }
         if(this.player == null || this.interactionManager == null) return;
         if (!(currentScreen instanceof EnchantmentScreen screen)) return;
-        AutoEnchanterController.INSTANCE.autoEnchant(screen, interactionManager, player, ConfigFileInteraction.INSTANCE.getConfig().getRules());
+        AutoEnchanterController.INSTANCE.autoEnchant(screen, interactionManager, player, ConfigService.INSTANCE.getConfig().getRules());
     }
 
 }

@@ -5,7 +5,9 @@
   "name": "WiamAutoEnchantMod",
   "description": "Say thanks to Wiamotit1e, the most angelic and glorious author!!",
   "authors": ["Wiamotit1e"],
-  "contact": {},
+  "contact": {
+    "sources": "https://github.com/Wiamotit1e/WiamAutoEnchantMod"
+  },
   "license": "MIT",
   "icon": "assets/wiamautoenchantmod/icon.png",
   "environment": "client",

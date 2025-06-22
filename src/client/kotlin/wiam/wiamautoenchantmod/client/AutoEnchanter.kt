@@ -4,6 +4,7 @@ import net.minecraft.client.gui.screen.ingame.EnchantmentScreen
 import net.minecraft.client.network.ClientPlayerInteractionManager
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Items
+import net.minecraft.registry.Registries
 import net.minecraft.registry.RegistryKeys
 import wiam.wiamautoenchantmod.client.config.Action
 import wiam.wiamautoenchantmod.client.config.EnchantRule
@@ -11,12 +12,40 @@ import java.util.stream.IntStream
 
 object AutoEnchanter : IAutoEnchanter {
     
-    private fun matchRule(rule: EnchantRule, enchantUnit: WEnchantUnit): Action {
-        // 1. 验证附魔ID
-        val enchantName = enchantUnit.id
-        if (rule.enchantmentId != "*" && rule.enchantmentId != enchantName) {
-            return Action.INVALID
+    private fun matchRule(rule: EnchantRule, enchantUnit: WEnchantUnit, itemId: String): Action {
+//        WiamUtil.logger.info(
+//            "{} {} {}, -> {} {}",
+//            rule,
+//            enchantUnit,
+//            itemId,
+//            if (rule.isItemIdRegex) {
+//                rule.itemId == ".*" || RegexCache.getRegex(rule.itemId).matches(itemId)
+//            } else {
+//                rule.itemId == itemId
+//            },
+//            if (rule.isEnchantmentIdRegex) {
+//                rule.enchantmentId == ".*" || RegexCache.getRegex(rule.enchantmentId).matches(enchantUnit.id)
+//            } else {
+//                rule.enchantmentId == enchantUnit.id
+//            }
+//        )
+        
+        // 0. 验证物品ID
+        val itemMatches = if (rule.isItemIdRegex) {
+            rule.itemId == ".*" || RegexCache.getRegex(rule.itemId).matches(itemId)
+        } else {
+            rule.itemId == itemId
         }
+        
+        if (!itemMatches) return Action.INVALID
+        // 1. 验证附魔ID
+        val enchantmentMatches = if (rule.isEnchantmentIdRegex) {
+            rule.enchantmentId == ".*" || RegexCache.getRegex(rule.enchantmentId).matches(enchantUnit.id)
+        } else {
+            rule.enchantmentId == enchantUnit.id
+        }
+        
+        if (!enchantmentMatches) return Action.INVALID
         // 2. 处理等级条件
         val value = enchantUnit.level
         val trimmedCondition = rule.level.trim()
@@ -176,7 +205,7 @@ object AutoEnchanter : IAutoEnchanter {
             var action = Action.EMPTY
             if (wEnchantUnits.size < 3) action = Action.LEVEL_1
             else for (it in rules) {
-                val action1 = matchRule(it, wEnchantUnits[2])
+                val action1 = matchRule(it, wEnchantUnits[2], Registries.ITEM.getId(player.currentScreenHandler.slots[0].stack.item).toString())
                 if (action1 == Action.INVALID) continue
                 if (action1 == Action.LEVEL_3) {
                     action = Action.LEVEL_3
