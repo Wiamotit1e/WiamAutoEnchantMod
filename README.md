@@ -1,6 +1,6 @@
 # WiamAutoEnchant Mod
 
-[![Fabric](https://img.shields.io/badge/Minecraft-1.20.1+-blueviolet?logo=curseforge)](https://fabricmc.net/)
+[![Fabric](https://img.shields.io/badge/Minecraft-1.21+-blueviolet?logo=curseforge)](https://fabricmc.net/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 Automate your enchanting experience in Minecraft! WiamAutoEnchant intelligently manages your enchanting table operations based on customizable rules, saving you time and resources.
@@ -107,7 +107,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 # **WiamAutoEnchant 模组**
 
-[![Fabric](https://img.shields.io/badge/Minecraft-1.20.1+-blueviolet?logo=curseforge)](https://fabricmc.net/)
+[![Fabric](https://img.shields.io/badge/Minecraft-1.21+-blueviolet?logo=curseforge)](https://fabricmc.net/)
 [![许可证](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 自动化你的 Minecraft 附魔体验！WiamAutoEnchant 基于自定义规则智能管理附魔台操作，节省你的时间和资源。
