@@ -81,7 +81,7 @@ object AutoEnchanter : IAutoEnchanter {
         val syncId = screen.screenHandler.syncId
         val slot = IntStream
             .range(2, screen.screenHandler.slots.size)
-            .filter { i: Int -> screen.screenHandler.slots[i].stack.item.enchantability > 0 && !screen.screenHandler.slots[i].stack.hasEnchantments() }
+            .filter { i: Int -> screen.screenHandler.slots[i].stack.isEnchantable && !screen.screenHandler.slots[i].stack.hasEnchantments() }
             .findFirst()
             .orElse(-1)
         
@@ -124,12 +124,12 @@ object AutoEnchanter : IAutoEnchanter {
         if (WiamUtil.autoEnchantSign == AutoEnchantSign.FINISHING) {
             
             var emptySlot = IntStream.range(2, screen.screenHandler.slots.size)
-                .filter { i: Int -> (!WiamUtil.excludedItems.contains(screen.screenHandler.slots[i].stack.item)) && (screen.screenHandler.slots[i].stack.item.enchantability > 0) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item !== Items.BOOK) }
+                .filter { i: Int -> (!WiamUtil.excludedItems.contains(screen.screenHandler.slots[i].stack.item)) && (screen.screenHandler.slots[i].stack.isEnchantable) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item !== Items.BOOK) }
                 .findFirst()
                 .orElse(-1)
             if (emptySlot == -1) {
                 emptySlot = IntStream.range(2, screen.screenHandler.slots.size)
-                    .filter { i: Int -> (!WiamUtil.excludedItems.contains(screen.screenHandler.slots[i].stack.item)) && (screen.screenHandler.slots[i].stack.item.enchantability > 0) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item === Items.BOOK) }
+                    .filter { i: Int -> (!WiamUtil.excludedItems.contains(screen.screenHandler.slots[i].stack.item)) && (screen.screenHandler.slots[i].stack.isEnchantable) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item === Items.BOOK) }
                     .findFirst()
                     .orElse(-1)
             }
@@ -139,12 +139,12 @@ object AutoEnchanter : IAutoEnchanter {
                 return
             }
             var slot = IntStream.range(2, screen.screenHandler.slots.size)
-                .filter{ i: Int -> (screen.screenHandler.slots[i].stack.item.enchantability > 0) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item === Items.BOOK) }
+                .filter{ i: Int -> (screen.screenHandler.slots[i].stack.isEnchantable) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item === Items.BOOK) }
                 .findFirst()
                 .orElse(-1)
             if (slot == -1) {
                 slot = IntStream.range(2, screen.screenHandler.slots.size)
-                    .filter{ i: Int -> (screen.screenHandler.slots[i].stack.item.enchantability > 0) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item !== Items.BOOK) }
+                    .filter{ i: Int -> (screen.screenHandler.slots[i].stack.isEnchantable) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item !== Items.BOOK) }
                     .findFirst()
                     .orElse(-1)
             }
@@ -153,7 +153,7 @@ object AutoEnchanter : IAutoEnchanter {
                 enchantLevel1(screen, interactionManager, syncId, player)
                 return
             }
-            if ((screen.screenHandler.slots[0].stack.item.enchantability > 0) && (!screen.screenHandler.slots[0].stack.hasEnchantments())) {
+            if ((screen.screenHandler.slots[0].stack.isEnchantable) && (!screen.screenHandler.slots[0].stack.hasEnchantments())) {
                 enchantLevel1(screen, interactionManager, syncId, player)
                 return
             }
@@ -167,7 +167,7 @@ object AutoEnchanter : IAutoEnchanter {
                 return
             }
             val wEnchantUnits = WEnchantUnit.of(
-                player.world.registryManager.get(RegistryKeys.ENCHANTMENT).indexedEntries,
+                player.world.registryManager.getOptional(RegistryKeys.ENCHANTMENT).get().indexedEntries,
                 screen.screenHandler.enchantmentId,
                 screen.screenHandler.enchantmentLevel
             )
