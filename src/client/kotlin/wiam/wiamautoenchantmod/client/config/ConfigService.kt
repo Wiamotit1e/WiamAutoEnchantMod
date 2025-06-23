@@ -7,6 +7,12 @@ object ConfigService: IConfigFileInteraction by ConfigFileInteraction, IConfigAc
         return 1
     }
     
+    override fun reloadConfig(): Int {
+        logConfigAction(ConfigAction.ReloadConfig)
+        loadConfigFile()
+        return 1
+    }
+    
     override fun toggleConfig(): Int {
         logConfigAction(ConfigAction.SetConfigState(!getConfig().isThisOn))
         return configMutator.toggleConfig()
@@ -48,6 +54,15 @@ object ConfigService: IConfigFileInteraction by ConfigFileInteraction, IConfigAc
         }
         logConfigAction(ConfigAction.ExchangeRules(index1, index2))
         return configMutator.exchangeRule(index1, index2)
+    }
+    
+    override fun moveRule(fromIndex: Int, toIndex: Int): Int {
+        if ((getConfig().rules.size <= fromIndex) || (getConfig().rules.size <= toIndex) || (fromIndex < 0) || (toIndex < 0)) {
+            logConfigAction(ConfigAction.IndexInvalid)
+            return 0
+        }
+        logConfigAction(ConfigAction.MoveRule(fromIndex, toIndex))
+        return configMutator.moveRule(fromIndex, toIndex)
     }
     
     override fun reset(): Int {

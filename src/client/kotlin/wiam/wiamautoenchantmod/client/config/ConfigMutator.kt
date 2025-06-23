@@ -40,6 +40,16 @@ object ConfigMutator: IConfigMutator{
         return 1
     }
     
+    override fun moveRule(fromIndex: Int, toIndex: Int): Int {
+        configFileInteraction.updateConfig {
+            if (fromIndex == toIndex) return@updateConfig
+            val rules = it.rules
+            val element = rules.removeAt(fromIndex)
+            rules.add(toIndex, element)
+        }
+        return 1
+    }
+    
     override fun reset(): Int {
         configFileInteraction.updateConfig { it.resetToDefault() }
         return 1

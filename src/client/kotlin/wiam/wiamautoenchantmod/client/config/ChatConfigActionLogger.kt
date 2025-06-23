@@ -26,8 +26,11 @@ object ChatConfigActionLogger: IConfigActionLogger {
                 sendMessage("Config state: ${action.config.isThisOn}  Rule state: ${action.config.isRulesOn}")
                 IntStream.range(0, action.config.rules.size).forEach {sendMessage("Rule" + it +  ": ${action.config.rules[it]}") }
             }
+            
+            ConfigAction.ReloadConfig -> sendMessage("Config reloading was executed")
+            is ConfigAction.MoveRule -> sendMessage("Rules at positions ${action.fromIndex} was moved to ${action.toIndex}")
         }
     }
     
-    private fun sendMessage(msg: String) = player?.sendMessage(Text.literal(msg).formatted(Formatting.BLUE).formatted(Formatting.BOLD), true)
+    private fun sendMessage(msg: String) = player?.sendMessage(Text.literal(msg).formatted(Formatting.BLUE).formatted(Formatting.BOLD), false)
 }

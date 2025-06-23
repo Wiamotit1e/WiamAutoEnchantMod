@@ -2,6 +2,7 @@ package wiam.wiamautoenchantmod.client.config
 
 import com.google.gson.GsonBuilder
 import net.fabricmc.loader.api.FabricLoader
+import wiam.wiamautoenchantmod.client.WiamUtil
 import java.nio.file.Files
 
 object ConfigFileInteraction : IConfigFileInteraction, IConfigProvider {

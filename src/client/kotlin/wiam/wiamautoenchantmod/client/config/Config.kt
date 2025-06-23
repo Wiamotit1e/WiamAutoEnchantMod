@@ -1,9 +1,11 @@
 package wiam.wiamautoenchantmod.client.config
 
+import wiam.wiamautoenchantmod.client.WiamUtil
+
 data class Config(var isThisOn: Boolean, var isRulesOn : Boolean, var rules: MutableList<EnchantRule>) {
     
     fun deepCopy() = copy(
-        rules = rules.map { it.copy() }.toMutableList() // 假设 EnchantRule 是 data class
+        rules = rules.map { it.copy() }.toMutableList()
     )
     
     fun resetToDefault() {

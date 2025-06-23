@@ -15,7 +15,7 @@ import wiam.wiamautoenchantmod.client.config.EnchantRule
 class WiamautoenchantmodClient : ClientModInitializer {
     
     override fun onInitializeClient() {
-        WiamUtil.logger.info("[Wiamautoenchantmod] Initialized")
+        WiamUtil.logger.info("[Wiamautoenchantmod] Initialized!")
         ConfigService.loadConfigFile()
         
         ClientCommandRegistrationCallback.EVENT.register{ dispatcher: CommandDispatcher<FabricClientCommandSource>?, registryAccess: CommandRegistryAccess? ->
@@ -24,7 +24,7 @@ class WiamautoenchantmodClient : ClientModInitializer {
                     .then(ClientCommandManager.literal("toggle_config")
                         .executes {
                             ConfigService.toggleConfig()
-                        } // 无参数切换
+                        }
                         .then(ClientCommandManager.argument("isConfigOn", BoolArgumentType.bool()) // 带参数设置
                             .executes {
                                 ConfigService.toggleConfig(BoolArgumentType.getBool(it, "isConfigOn"))
@@ -34,7 +34,7 @@ class WiamautoenchantmodClient : ClientModInitializer {
                     .then(ClientCommandManager.literal("toggle_rule")
                         .executes {
                             ConfigService.toggleRule()
-                        } // 无参数切换
+                        }
                         .then(ClientCommandManager.argument("isRuleOn", BoolArgumentType.bool()) // 带参数设置
                             .executes { ConfigService.toggleRule(BoolArgumentType.getBool(it, "isRuleOn")) }))
                     .then(ClientCommandManager.literal("reset")
@@ -44,8 +44,8 @@ class WiamautoenchantmodClient : ClientModInitializer {
                     )
                     .then(ClientCommandManager.literal("remove_rule")
                         .then(ClientCommandManager.argument("index", IntegerArgumentType.integer())
-                            .executes { ConfigService.removeRule(IntegerArgumentType.getInteger(it, "index")
-                            )
+                            .executes {
+                                ConfigService.removeRule(IntegerArgumentType.getInteger(it, "index"))
                             }
                         )
                     )
@@ -61,13 +61,25 @@ class WiamautoenchantmodClient : ClientModInitializer {
                             )
                         )
                     )
+                    .then(ClientCommandManager.literal("move_rule")
+                        .then(ClientCommandManager.argument("from_index", IntegerArgumentType.integer())
+                            .then(ClientCommandManager.argument("to_index", IntegerArgumentType.integer())
+                                .executes {
+                                    ConfigService.moveRule(
+                                        IntegerArgumentType.getInteger(it, "from_index"),
+                                        IntegerArgumentType.getInteger(it, "to_index")
+                                    )
+                                }
+                            )
+                        )
+                    )
                     .then(ClientCommandManager.literal("add_rule")
                         .then(ClientCommandManager.argument("item_id", StringArgumentType.string())
                             .then(ClientCommandManager.argument("enchantment_id", StringArgumentType.string())
                                 .then(ClientCommandManager.argument("level", StringArgumentType.string())
                                     .then(ClientCommandManager.argument("action", ActionArgumentType.action())
-                                        .then(ClientCommandManager.argument("is_enchantment_id_regex", BoolArgumentType.bool())
-                                            .then(ClientCommandManager.argument("is_item_id_regex", BoolArgumentType.bool())
+                                        .then(ClientCommandManager.argument("is_item_id_regex", BoolArgumentType.bool())
+                                            .then(ClientCommandManager.argument("is_enchantment_id_regex", BoolArgumentType.bool())
                                                 .executes {
                                                     ConfigService.addRule(
                                                         EnchantRule(
@@ -90,6 +102,11 @@ class WiamautoenchantmodClient : ClientModInitializer {
                     .then(ClientCommandManager.literal("show_config")
                         .executes {
                             ConfigService.showConfig()
+                        }
+                    )
+                    .then(ClientCommandManager.literal("reload_config")
+                        .executes {
+                            ConfigService.reloadConfig()
                         }
                     )
                 )

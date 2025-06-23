@@ -8,5 +8,6 @@ interface IConfigMutator {
     fun addRule(rule: EnchantRule): Int
     fun removeRule(index: Int): Int
     fun exchangeRule(index1: Int, index2: Int): Int
+    fun moveRule(fromIndex: Int, toIndex: Int): Int
     fun reset(): Int
 }

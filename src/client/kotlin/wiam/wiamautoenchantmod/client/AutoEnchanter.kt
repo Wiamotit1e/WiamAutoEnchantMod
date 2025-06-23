@@ -122,53 +122,53 @@ object AutoEnchanter : IAutoEnchanter {
     override fun enchantAllItemsWithRules (screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, player: PlayerEntity, rules: List<EnchantRule>) {
         val syncId = screen.screenHandler.syncId
         if (WiamUtil.autoEnchantSign == AutoEnchantSign.FINISHING) {
+            
             var emptySlot = IntStream.range(2, screen.screenHandler.slots.size)
                 .filter { i: Int -> (!WiamUtil.excludedItems.contains(screen.screenHandler.slots[i].stack.item)) && (screen.screenHandler.slots[i].stack.item.enchantability > 0) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item !== Items.BOOK) }
                 .findFirst()
                 .orElse(-1)
+            if (emptySlot == -1) {
+                emptySlot = IntStream.range(2, screen.screenHandler.slots.size)
+                    .filter { i: Int -> (!WiamUtil.excludedItems.contains(screen.screenHandler.slots[i].stack.item)) && (screen.screenHandler.slots[i].stack.item.enchantability > 0) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item === Items.BOOK) }
+                    .findFirst()
+                    .orElse(-1)
+            }
             if (emptySlot != -1) {
                 EnchantmentScreenInteraction.fillEnchantingSlot(interactionManager, syncId, emptySlot, player)
                 WiamUtil.autoEnchantSign = AutoEnchantSign.WAITING
                 return
             }
-            emptySlot = IntStream.range(2, screen.screenHandler.slots.size)
-                .filter { i: Int -> (!WiamUtil.excludedItems.contains(screen.screenHandler.slots[i].stack.item)) && (screen.screenHandler.slots[i].stack.item.enchantability > 0) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item === Items.BOOK) }
+            var slot = IntStream.range(2, screen.screenHandler.slots.size)
+                .filter{ i: Int -> (screen.screenHandler.slots[i].stack.item.enchantability > 0) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item === Items.BOOK) }
                 .findFirst()
                 .orElse(-1)
-            if (emptySlot != -1) {
-                EnchantmentScreenInteraction.fillEnchantingSlot(interactionManager, syncId, emptySlot, player)
-                WiamUtil.autoEnchantSign = AutoEnchantSign.WAITING
-                return
+            if (slot == -1) {
+                slot = IntStream.range(2, screen.screenHandler.slots.size)
+                    .filter{ i: Int -> (screen.screenHandler.slots[i].stack.item.enchantability > 0) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) && (screen.screenHandler.slots[i].stack.item !== Items.BOOK) }
+                    .findFirst()
+                    .orElse(-1)
             }
-            val slot = IntStream.range(2, screen.screenHandler.slots.size)
-                .filter{ i: Int -> (screen.screenHandler.slots[i].stack.item.enchantability > 0) && (!screen.screenHandler.slots[i].stack.hasEnchantments()) }
-                .findFirst()
-                .orElse(-1)
             if (slot != -1) {
                 if( screen.screenHandler.slots[1].stack.isEmpty) {
-                    val slotOfLapis = IntStream
-                        .range(2, screen.screenHandler.slots.size)
-                        .filter { i: Int -> screen.screenHandler.slots[i].stack.item === Items.LAPIS_LAZULI }
-                        .findFirst()
-                        .orElse(-1)
+                    val slotOfLapis = getSlotOfLapis(screen)
                     if (slotOfLapis == -1) {
                         WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
                         return
                     }
                     EnchantmentScreenInteraction.fillLapisSlot(interactionManager, syncId, slotOfLapis, player)
                 }
+                
+                
                 EnchantmentScreenInteraction.fillEnchantingSlot(interactionManager, syncId, slot, player)
                 interactionManager.clickButton(syncId, 0)
                 WiamUtil.autoEnchantSign = AutoEnchantSign.PROCESSING
                 return
             }
+            
+            
             if ((screen.screenHandler.slots[0].stack.item.enchantability > 0) && (!screen.screenHandler.slots[0].stack.hasEnchantments())) {
                 if( screen.screenHandler.slots[1].stack.isEmpty) {
-                    val slotOfLapis = IntStream
-                        .range(2, screen.screenHandler.slots.size)
-                        .filter { i: Int -> screen.screenHandler.slots[i].stack.item === Items.LAPIS_LAZULI }
-                        .findFirst()
-                        .orElse(-1)
+                    val slotOfLapis = getSlotOfLapis(screen)
                     if (slotOfLapis == -1) {
                         WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
                         return
@@ -217,43 +217,18 @@ object AutoEnchanter : IAutoEnchanter {
                 }
             }
             if (action == Action.LEVEL_3) {
+                
                 var slotOfLapis: Int
-                if (screen.screenHandler.slots[1].stack.count < 3) {
-                    slotOfLapis = IntStream
-                        .range(2, screen.screenHandler.slots.size)
-                        .filter { i: Int -> screen.screenHandler.slots[i].stack.item === Items.LAPIS_LAZULI }
-                        .findFirst()
-                        .orElse(-1)
+                repeat(3) {
+                    if (screen.screenHandler.slots[1].stack.count >= 3) return@repeat
+                    slotOfLapis = getSlotOfLapis(screen)
                     if (slotOfLapis == -1) {
                         WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
                         return
                     }
                     EnchantmentScreenInteraction.fillLapisSlot(interactionManager, syncId, slotOfLapis, player)
                 }
-                if (screen.screenHandler.slots[1].stack.count < 3) {
-                    slotOfLapis = IntStream
-                        .range(2, screen.screenHandler.slots.size)
-                        .filter { i: Int -> screen.screenHandler.slots[i].stack.item === Items.LAPIS_LAZULI }
-                        .findFirst()
-                        .orElse(-1)
-                    if (slotOfLapis == -1) {
-                        WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
-                        return
-                    }
-                    EnchantmentScreenInteraction.fillLapisSlot(interactionManager, syncId, slotOfLapis, player)
-                }
-                if (screen.screenHandler.slots[1].stack.count < 3) {
-                    slotOfLapis = IntStream
-                        .range(2, screen.screenHandler.slots.size)
-                        .filter { i: Int -> screen.screenHandler.slots[i].stack.item === Items.LAPIS_LAZULI }
-                        .findFirst()
-                        .orElse(-1)
-                    if (slotOfLapis == -1) {
-                        WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
-                        return
-                    }
-                    EnchantmentScreenInteraction.fillLapisSlot(interactionManager, syncId, slotOfLapis, player)
-                }
+                
                 if (screen.screenHandler.slots[1].stack.count < 3) {
                     WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
                     return
@@ -289,4 +264,10 @@ object AutoEnchanter : IAutoEnchanter {
             return
         }
     }
+    
+    private fun getSlotOfLapis(screen: EnchantmentScreen) = IntStream
+        .range(2, screen.screenHandler.slots.size)
+        .filter { i: Int -> screen.screenHandler.slots[i].stack.item === Items.LAPIS_LAZULI }
+        .findFirst()
+        .orElse(-1)
 }

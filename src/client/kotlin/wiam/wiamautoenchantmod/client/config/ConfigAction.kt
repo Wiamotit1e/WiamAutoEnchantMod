@@ -8,8 +8,10 @@ sealed class ConfigAction {
     data class AddRule(val rule: EnchantRule) : ConfigAction()
     data class RemoveRule(val index: Int, val rule: EnchantRule) : ConfigAction()
     data class ExchangeRules(val index1: Int, val index2: Int) : ConfigAction()
-    data object IndexInvalid: ConfigAction()
+    data class MoveRule(val fromIndex: Int, val toIndex: Int) : ConfigAction()
     data class ShowConfig(val config: Config) : ConfigAction()
+    data object IndexInvalid: ConfigAction()
     // 系统操作
     data object ResetConfig : ConfigAction()
+    data object ReloadConfig : ConfigAction()
 }
