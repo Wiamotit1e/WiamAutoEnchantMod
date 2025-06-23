@@ -4,5 +4,5 @@ enum class AutoEnchantSign {
     PROCESSING,
     WAITING,
     FINISHING,
-    FINALLY,
+    FINALLY
 }

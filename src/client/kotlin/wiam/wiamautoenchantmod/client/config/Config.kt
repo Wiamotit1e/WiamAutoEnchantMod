@@ -1,7 +1,5 @@
 package wiam.wiamautoenchantmod.client.config
 
-import wiam.wiamautoenchantmod.client.WiamUtil
-
 data class Config(var isThisOn: Boolean, var isRulesOn : Boolean, var rules: MutableList<EnchantRule>) {
     
     fun deepCopy() = copy(

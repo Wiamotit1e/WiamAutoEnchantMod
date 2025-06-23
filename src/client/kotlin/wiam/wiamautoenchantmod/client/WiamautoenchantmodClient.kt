@@ -15,7 +15,7 @@ import wiam.wiamautoenchantmod.client.config.EnchantRule
 class WiamautoenchantmodClient : ClientModInitializer {
     
     override fun onInitializeClient() {
-        WiamUtil.logger.info("[Wiamautoenchantmod] Initialized!")
+        WiamUtil.logger.info("[Wiamautoenchantmod] Initialized!!")
         ConfigService.loadConfigFile()
         
         ClientCommandRegistrationCallback.EVENT.register{ dispatcher: CommandDispatcher<FabricClientCommandSource>?, registryAccess: CommandRegistryAccess? ->

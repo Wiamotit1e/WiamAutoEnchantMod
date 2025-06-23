@@ -149,35 +149,12 @@ object AutoEnchanter : IAutoEnchanter {
                     .orElse(-1)
             }
             if (slot != -1) {
-                if( screen.screenHandler.slots[1].stack.isEmpty) {
-                    val slotOfLapis = getSlotOfLapis(screen)
-                    if (slotOfLapis == -1) {
-                        WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
-                        return
-                    }
-                    EnchantmentScreenInteraction.fillLapisSlot(interactionManager, syncId, slotOfLapis, player)
-                }
-                
-                
                 EnchantmentScreenInteraction.fillEnchantingSlot(interactionManager, syncId, slot, player)
-                interactionManager.clickButton(syncId, 0)
-                WiamUtil.autoEnchantSign = AutoEnchantSign.PROCESSING
+                enchantLevel1(screen, interactionManager, syncId, player)
                 return
             }
-            
-            
             if ((screen.screenHandler.slots[0].stack.item.enchantability > 0) && (!screen.screenHandler.slots[0].stack.hasEnchantments())) {
-                if( screen.screenHandler.slots[1].stack.isEmpty) {
-                    val slotOfLapis = getSlotOfLapis(screen)
-                    if (slotOfLapis == -1) {
-                        WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
-                        return
-                    }
-                    EnchantmentScreenInteraction.fillLapisSlot(interactionManager, syncId, slotOfLapis, player)
-                }
-                
-                interactionManager.clickButton(syncId, 0)
-                WiamUtil.autoEnchantSign = AutoEnchantSign.PROCESSING
+                enchantLevel1(screen, interactionManager, syncId, player)
                 return
             }
             WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
@@ -204,37 +181,22 @@ object AutoEnchanter : IAutoEnchanter {
             
             var action = Action.EMPTY
             if (wEnchantUnits.size < 3) action = Action.LEVEL_1
-            else for (it in rules) {
-                val action1 = matchRule(it, wEnchantUnits[2], Registries.ITEM.getId(player.currentScreenHandler.slots[0].stack.item).toString())
-                if (action1 == Action.INVALID) continue
-                if (action1 == Action.LEVEL_3) {
-                    action = Action.LEVEL_3
-                    break
-                }
-                if (action1 == Action.LEVEL_1) {
-                    action = Action.LEVEL_1
-                    break
+            else {
+                for (it in rules) {
+                    val action1 = matchRule(it, wEnchantUnits[2], Registries.ITEM.getId(player.currentScreenHandler.slots[0].stack.item).toString())
+                    if (action1 == Action.INVALID) continue
+                    if (action1 == Action.LEVEL_3) {
+                        action = Action.LEVEL_3
+                        break
+                    }
+                    if (action1 == Action.LEVEL_1) {
+                        action = Action.LEVEL_1
+                        break
+                    }
                 }
             }
             if (action == Action.LEVEL_3) {
-                
-                var slotOfLapis: Int
-                repeat(3) {
-                    if (screen.screenHandler.slots[1].stack.count >= 3) return@repeat
-                    slotOfLapis = getSlotOfLapis(screen)
-                    if (slotOfLapis == -1) {
-                        WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
-                        return
-                    }
-                    EnchantmentScreenInteraction.fillLapisSlot(interactionManager, syncId, slotOfLapis, player)
-                }
-                
-                if (screen.screenHandler.slots[1].stack.count < 3) {
-                    WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
-                    return
-                }
-                interactionManager.clickButton(syncId, 2)
-                WiamUtil.autoEnchantSign = AutoEnchantSign.PROCESSING
+                enchantLevel3(screen, interactionManager, syncId, player)
                 return
             }
             WiamUtil.excludedItems.add(screen.screenHandler.slots[0].stack.item)
@@ -263,6 +225,41 @@ object AutoEnchanter : IAutoEnchanter {
             WiamUtil.autoEnchantSign = AutoEnchantSign.FINISHING
             return
         }
+    }
+    
+    private fun enchantLevel3(screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, syncId: Int, player: PlayerEntity) {
+        var slotOfLapis: Int
+        repeat(3) {
+            if (screen.screenHandler.slots[1].stack.count >= 3) return@repeat
+            slotOfLapis = getSlotOfLapis(screen)
+            if (slotOfLapis == -1) {
+                WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
+                return
+            }
+            EnchantmentScreenInteraction.fillLapisSlot(interactionManager, syncId, slotOfLapis, player)
+        }
+        
+        if (screen.screenHandler.slots[1].stack.count < 3) {
+            WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
+            return
+        }
+        interactionManager.clickButton(syncId, 2)
+        WiamUtil.autoEnchantSign = AutoEnchantSign.PROCESSING
+        return
+    }
+    
+    private fun enchantLevel1(screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, syncId: Int, player: PlayerEntity) {
+        if (screen.screenHandler.slots[1].stack.isEmpty) {
+            val slotOfLapis = getSlotOfLapis(screen)
+            if (slotOfLapis == -1) {
+                WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
+                return
+            }
+            EnchantmentScreenInteraction.fillLapisSlot(interactionManager, syncId, slotOfLapis, player)
+        }
+        interactionManager.clickButton(syncId, 0)
+        WiamUtil.autoEnchantSign = AutoEnchantSign.PROCESSING
+        return
     }
     
     private fun getSlotOfLapis(screen: EnchantmentScreen) = IntStream
