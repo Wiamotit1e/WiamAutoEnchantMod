@@ -109,6 +109,13 @@ class WiamautoenchantmodClient : ClientModInitializer {
                             ConfigService.reloadConfig()
                         }
                     )
+                    .then(ClientCommandManager.literal("set_max_wait_time")
+                        .then(ClientCommandManager.argument("max_wait_time", IntegerArgumentType.integer())
+                            .executes {
+                                ConfigService.setMaxwWaitTick(IntegerArgumentType.getInteger(it, "max_wait_time"))
+                            }
+                        )
+                    )
                 )
             )
         }
