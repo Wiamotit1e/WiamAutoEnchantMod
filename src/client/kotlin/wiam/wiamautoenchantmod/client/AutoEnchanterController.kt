@@ -13,11 +13,13 @@ object AutoEnchanterController {
         get() = ConfigService.getConfig().isThisOn
     private val isRulesOn: Boolean
         get() = ConfigService.getConfig().isRulesOn
+    private val maxWaitTick: Int
+        get() = ConfigService.getConfig().maxWaitTick
     
     fun autoEnchant(screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, player: PlayerEntity, rules: List<EnchantRule>?) {
         if (!isThisOn) return
-        if (!isRulesOn) autoEnchanter.enchantAllItems(screen, interactionManager, player)
-        else autoEnchanter.enchantAllItemsWithRules(screen, interactionManager, player, rules!!)
+        if (!isRulesOn) autoEnchanter.enchantAllItems(screen, interactionManager, player, maxWaitTick)
+        else autoEnchanter.enchantAllItemsWithRules(screen, interactionManager, player, rules!!, maxWaitTick)
     }
     
 }
