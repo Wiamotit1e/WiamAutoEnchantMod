@@ -76,7 +76,7 @@ object AutoEnchanter : IAutoEnchanter {
         return if (value == number) rule.action else Action.INVALID
     }
     
-    override fun enchantAllItems(screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, player:PlayerEntity) {
+    override fun enchantAllItems(screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, player:PlayerEntity, maxWaitTick:Int) {
         val level = 2
         val syncId = screen.screenHandler.syncId
         val slot = IntStream
@@ -105,7 +105,7 @@ object AutoEnchanter : IAutoEnchanter {
         }
         
         if (WiamUtil.autoEnchantSign == AutoEnchantSign.PROCESSING){
-            if (WiamUtil.counterOfWaitingForResult >= 5) {
+            if (WiamUtil.counterOfWaitingForResult >= maxWaitTick) {
                 screen.close()
                 return
             }
@@ -119,7 +119,7 @@ object AutoEnchanter : IAutoEnchanter {
         }
     }
     
-    override fun enchantAllItemsWithRules (screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, player: PlayerEntity, rules: List<EnchantRule>) {
+    override fun enchantAllItemsWithRules(screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, player: PlayerEntity, rules: List<EnchantRule>, maxWaitTick: Int) {
         val syncId = screen.screenHandler.syncId
         if (WiamUtil.autoEnchantSign == AutoEnchantSign.FINISHING) {
             
@@ -161,7 +161,7 @@ object AutoEnchanter : IAutoEnchanter {
             return
         }
         if (WiamUtil.autoEnchantSign == AutoEnchantSign.WAITING) {
-            if (WiamUtil.counterOfWaitingForResult >= 5) {
+            if (WiamUtil.counterOfWaitingForResult >= maxWaitTick) {
                 WiamUtil.counterOfWaitingForResult = 0
                 WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
                 return
@@ -205,7 +205,7 @@ object AutoEnchanter : IAutoEnchanter {
         }
         if (WiamUtil.autoEnchantSign == AutoEnchantSign.PROCESSING) {
             WiamUtil.excludedItems.clear()
-            if (WiamUtil.counterOfWaitingForResult >= 5) {
+            if (WiamUtil.counterOfWaitingForResult >= maxWaitTick) {
                 WiamUtil.counterOfWaitingForResult = 0
                 WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
                 return
