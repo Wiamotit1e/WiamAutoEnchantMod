@@ -20,17 +20,19 @@ object ChatConfigActionLogger: IConfigActionLogger {
             is ConfigAction.RemoveRule -> sendMessage("Rule ${action.rule} was removed")
             is ConfigAction.ExchangeRules -> sendMessage("Rules at positions ${action.index1} and ${action.index2} were swapped")
             
-            ConfigAction.ResetConfig -> sendMessage("Config was resetted to default")
+            ConfigAction.ResetConfig -> sendMessage("Config was reset to default")
             ConfigAction.IndexInvalid -> sendMessage("Index was too invalid!")
             is ConfigAction.ShowConfig -> {
                 sendMessage("Config state: ${action.config.isThisOn}  Rule state: ${action.config.isRulesOn}")
+                sendMessage("Max wait time: ${action.config.maxWaitTick}")
                 IntStream.range(0, action.config.rules.size).forEach {sendMessage("Rule" + it +  ": ${action.config.rules[it]}") }
             }
             
             ConfigAction.ReloadConfig -> sendMessage("Config reloading was executed")
             is ConfigAction.MoveRule -> sendMessage("Rules at positions ${action.fromIndex} was moved to ${action.toIndex}")
+            is ConfigAction.SetMaxwWaitTick -> sendMessage("Max wait tick was set to ${action.maxWaitTime}")
         }
     }
     
-    private fun sendMessage(msg: String) = player?.sendMessage(Text.literal(msg).formatted(Formatting.BLUE).formatted(Formatting.BOLD), false)
+    private fun sendMessage(msg: String) = player?.sendMessage(Text.literal("[AutoEnchant] $msg").formatted(Formatting.BLUE).formatted(Formatting.BOLD), false)
 }
