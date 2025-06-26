@@ -105,7 +105,7 @@ object AutoEnchanter : IAutoEnchanter {
         }
         
         if (WiamUtil.autoEnchantSign == AutoEnchantSign.PROCESSING){
-            if (WiamUtil.counterOfWaitingForResult >= 5) {
+            if (WiamUtil.counterOfWaitingForResult >= maxWaitTick) {
                 screen.close()
                 return
             }
@@ -161,7 +161,7 @@ object AutoEnchanter : IAutoEnchanter {
             return
         }
         if (WiamUtil.autoEnchantSign == AutoEnchantSign.WAITING) {
-            if (WiamUtil.counterOfWaitingForResult >= 5) {
+            if (WiamUtil.counterOfWaitingForResult >= maxWaitTick) {
                 WiamUtil.counterOfWaitingForResult = 0
                 WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
                 return
@@ -205,7 +205,7 @@ object AutoEnchanter : IAutoEnchanter {
         }
         if (WiamUtil.autoEnchantSign == AutoEnchantSign.PROCESSING) {
             WiamUtil.excludedItems.clear()
-            if (WiamUtil.counterOfWaitingForResult >= 5) {
+            if (WiamUtil.counterOfWaitingForResult >= maxWaitTick) {
                 WiamUtil.counterOfWaitingForResult = 0
                 WiamUtil.autoEnchantSign = AutoEnchantSign.FINALLY
                 return
