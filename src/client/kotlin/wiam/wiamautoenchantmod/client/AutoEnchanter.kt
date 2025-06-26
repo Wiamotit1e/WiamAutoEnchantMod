@@ -76,7 +76,7 @@ object AutoEnchanter : IAutoEnchanter {
         return if (value == number) rule.action else Action.INVALID
     }
     
-    override fun enchantAllItems(screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, player:PlayerEntity) {
+    override fun enchantAllItems(screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, player: PlayerEntity, maxWaitTick: Int) {
         val level = 2
         val syncId = screen.screenHandler.syncId
         val slot = IntStream
@@ -119,7 +119,7 @@ object AutoEnchanter : IAutoEnchanter {
         }
     }
     
-    override fun enchantAllItemsWithRules (screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, player: PlayerEntity, rules: List<EnchantRule>) {
+    override fun enchantAllItemsWithRules(screen: EnchantmentScreen, interactionManager: ClientPlayerInteractionManager, player: PlayerEntity, rules: List<EnchantRule>, maxWaitTick: Int) {
         val syncId = screen.screenHandler.syncId
         if (WiamUtil.autoEnchantSign == AutoEnchantSign.FINISHING) {
             
