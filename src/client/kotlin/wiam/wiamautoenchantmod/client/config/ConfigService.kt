@@ -33,6 +33,11 @@ object ConfigService: IConfigFileInteraction by ConfigFileInteraction, IConfigAc
         return configMutator.toggleRule(state)
     }
     
+    override fun setMaxwWaitTick(maxWaitTick: Int): Int {
+        logConfigAction(ConfigAction.SetMaxwWaitTick(maxWaitTick))
+        return configMutator.setMaxwWaitTick(maxWaitTick)
+    }
+    
     override fun addRule(rule: EnchantRule): Int {
         logConfigAction(ConfigAction.AddRule(rule))
         return configMutator.addRule(rule)

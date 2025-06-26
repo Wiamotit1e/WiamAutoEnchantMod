@@ -1,6 +1,6 @@
 package wiam.wiamautoenchantmod.client.config
 
-data class Config(var isThisOn: Boolean, var isRulesOn : Boolean, var rules: MutableList<EnchantRule>) {
+data class Config(var isThisOn: Boolean, var isRulesOn : Boolean, var maxWaitTick: Int, var rules: MutableList<EnchantRule>) {
     
     fun deepCopy() = copy(
         rules = rules.map { it.copy() }.toMutableList()
@@ -9,10 +9,11 @@ data class Config(var isThisOn: Boolean, var isRulesOn : Boolean, var rules: Mut
     fun resetToDefault() {
         this.isThisOn = DEFAULT.isThisOn
         this.isRulesOn = DEFAULT.isRulesOn
+        this.maxWaitTick = DEFAULT.maxWaitTick
         this.rules = DEFAULT.rules
     }
     
     companion object {
-        val DEFAULT = Config(isThisOn = false, isRulesOn = false, rules = EnchantRule.DEFAULT)
+        val DEFAULT = Config(isThisOn = false, isRulesOn = false, maxWaitTick = 10, rules = EnchantRule.DEFAULT)
     }
 }

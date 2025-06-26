@@ -25,6 +25,11 @@ object ConfigMutator: IConfigMutator{
         return 1
     }
     
+    override fun setMaxwWaitTick(maxWaitTick: Int): Int {
+        configFileInteraction.updateConfig { it.maxWaitTick = maxWaitTick }
+        return 1
+    }
+    
     override fun addRule(rule: EnchantRule): Int {
         configFileInteraction.updateConfig { it.rules.add(rule) }
         return 1

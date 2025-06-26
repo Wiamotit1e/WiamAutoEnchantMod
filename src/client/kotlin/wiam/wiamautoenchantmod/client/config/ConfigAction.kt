@@ -10,6 +10,7 @@ sealed class ConfigAction {
     data class ExchangeRules(val index1: Int, val index2: Int) : ConfigAction()
     data class MoveRule(val fromIndex: Int, val toIndex: Int) : ConfigAction()
     data class ShowConfig(val config: Config) : ConfigAction()
+    data class SetMaxwWaitTick(val maxWaitTime: Int) : ConfigAction()
     data object IndexInvalid: ConfigAction()
     // 系统操作
     data object ResetConfig : ConfigAction()

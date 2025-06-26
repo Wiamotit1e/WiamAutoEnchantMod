@@ -9,13 +9,15 @@ interface IAutoEnchanter {
     fun enchantAllItems(
         screen: EnchantmentScreen,
         interactionManager: ClientPlayerInteractionManager,
-        player: PlayerEntity
+        player: PlayerEntity,
+        maxWaitTick: Int
     )
     
     fun enchantAllItemsWithRules(
         screen: EnchantmentScreen,
         interactionManager: ClientPlayerInteractionManager,
         player: PlayerEntity,
-        rules: List<EnchantRule>
+        rules: List<EnchantRule>,
+        maxWaitTick: Int
     )
 }

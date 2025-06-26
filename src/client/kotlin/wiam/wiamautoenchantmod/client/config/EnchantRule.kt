@@ -10,6 +10,7 @@ data class EnchantRule(val itemId:String, val enchantmentId:String, val level:St
             EnchantRule("^(?!.*leggings\$).+\$", "minecraft:blast_protection", ">0", Action.LEVEL_1),
             EnchantRule(".*", "minecraft:knockback", ">1", Action.LEVEL_1),
             EnchantRule(".*", "minecraft:fire_aspect", ">0", Action.LEVEL_1),
+            EnchantRule(".*", "minecraft:bane_of_arthropods", ">0", Action.LEVEL_1),
             EnchantRule(".*", "minecraft:smite", ">0", Action.LEVEL_1),
             EnchantRule(".*", "minecraft:fire_protection", ">0", Action.LEVEL_1),
             EnchantRule(".*", "minecraft:thorns", ">0", Action.LEVEL_1),
